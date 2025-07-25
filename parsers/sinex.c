@@ -60,6 +60,9 @@ static void findSinexTags (void)
 		{
 			strncpy (blockNameStart, (const char *)&line[1], MAX_BLOCK_NAME_LEN);
 			blockNameStart[MAX_BLOCK_NAME_LEN] = '\0' ;      // safeguard if line length > MAX_BLOCK_NAME_LEN+1 (should not happen)
+			// remove possible trailing spaces
+			for (char * ptr = blockNameStart+strlen(blockNameStart)-1 ; (ptr>=blockNameStart) && isspace(*ptr) ; ptr--)
+				*ptr = '\0' ;
 			initTagEntry (&e, (const char * const)blockNameStart, K_BLOCK);
 			inBlock = true ;
 		} 
@@ -68,6 +71,9 @@ static void findSinexTags (void)
 			unsigned long lineNumber = getInputLineNumber ();
 			strncpy (blockNameEnd, (const char *)&line[1], MAX_BLOCK_NAME_LEN);
 			blockNameEnd[MAX_BLOCK_NAME_LEN] = '\0' ;      // safeguard if line length > MAX_BLOCK_NAME_LEN (should not happen)
+			// remove possible trailing spaces
+			for (char * ptr = blockNameEnd+strlen(blockNameEnd)-1 ;  (ptr>=blockNameEnd) && isspace(*ptr) ; ptr--)
+				*ptr = '\0' ;
 			if (strcmp (blockNameStart, blockNameEnd) == 0)
 			{
 				setTagEndLine(&e, lineNumber);
